@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>World Clock</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+</head>
+<body>
+    <h1>The World Clock</h1>
+
+    <div class="container">
+        <input type="text"/>
+        <div class="welcome">
+            <p>Hi! Hope everything's cool in <b><span id="local-place"></span></b>.</p>
+            <p>The local time is <b><span id="local-time"></span></b> (unless you're faking your location, of course!).</p>
+            <div class="clock"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
