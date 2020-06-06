@@ -18,50 +18,42 @@ async function getUnixTime() {
     }
 };
 
-// async function getTimeZone() {
-//     const res = await axios.get('http://worldtimeapi.org/api/ip/');
-//     const localPlace = document.querySelector('#local-place');
-//     return localPlace.textContent = res.data.timezone;
-// }
-
-// const search = document.querySelector('form').addEventListener('click', event => {
-//     console.log(search)
-// })
+async function getTimeZone() {
+    const res = await axios.get('http://worldtimeapi.org/api/ip/');
+    const localPlace = document.querySelector('#local-place');
+    return localPlace.textContent = res.data.timezone;
+}
 
 async function townSearch(search) {
-    const res = await axios.get('http://api.geonames.org/postalCodeLookupJSON?', {
+    const res = await axios.get('http://api.geonames.org/searchJSON?', {
         params: {
-            placename: search,
-            maxRows: 10,
+            q: search,
+            orderby: 'relevance',
+            cities: 'cities1000',
+            maxRows: 500,
             username: 'ricardofrancoli'
         },
     });
 
-    console.dir(res.data.postalcodes)
-    // console.dir(search)
+    console.log(search)
+    console.dir(res.data.geonames);
 
-    // return res.data.postalcodes
-
-    // const towns = res.data.postalcodes;
-    // for (let town of towns) {
-    //     console.dir(town)
-    //     console.log(`lng: ${town.lng}, lat: ${town.lat}`);
-    // }
-
-    // const input = document.querySelector('input');
-    // const searchBtn = document.querySelector('button');
-
-    // const submit = searchBtn.addEventListener('click', event => {
-    //     event.preventDefault();
-    //     console.log(event)
-    //     console.log(input.value)
-    //     input.value = search;
-    // })
-    // console.log(input.value);
-    // console.log(submit);
+    let towns = res.data.geonames;
+    let searchedTowns = [];
+    for(let town of towns) {
+        if (town.toponymName.toLowerCase().includes(search)) {
+            searchedTowns.push(`${town.toponymName}, ${town.countryCode}`);
+        }
+    }
+    console.log(searchedTowns);
+    const filteredTowns = searchedTowns.filter( (town, index) => {
+        return searchedTowns.indexOf(town) === index;
+    });
+    console.log(filteredTowns)
 }
 
 const input = document.querySelector('input');
+const searchBtn = document.querySelector('button');
 
 let timeoutId;
 const onInput = event => {
@@ -75,7 +67,11 @@ const onInput = event => {
 
 input.addEventListener('input', onInput);
 
+searchBtn.addEventListener('click', event => {
+    event.preventDefault();
+    townSearch(input.value);
+});
+
 
 getUnixTime();
-// getTimeZone();
-// townSearch();
+getTimeZone();
