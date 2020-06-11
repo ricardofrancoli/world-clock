@@ -54,7 +54,12 @@ const townSearch = async (search) => {
         let searchedTowns = [];
         for(let town of towns) {
             if (town.toponymName.toLowerCase().includes(search)) {
-                searchedTowns.push([town.toponymName, town.countryCode, town.lat, town.lng]);
+                searchedTowns.push({
+                    town: town.toponymName,
+                    country: town.countryCode,
+                    lat: town.lat,
+                    lng: town.lng
+                });
             }
             // pauseClock(interval);
             // getTimezone(town.lat, town.lng)
