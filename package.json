@@ -1,0 +1,17 @@
+{
+  "name": "clock",
+  "version": "1.0.0",
+  "description": "Little app that allows you to find what time is it anywhere in the world",
+  "main": "app.js",
+  "dependencies": {
+    "countrynames": "^0.1.1",
+    "express": "^4.17.1",
+    "geo-tz": "^6.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
