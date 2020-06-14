@@ -1,0 +1,40 @@
+html {
+    /* font-family: 'Nunito Sans', sans-serif; */
+    background-color: #252321;
+    text-align: center;
+}
+
+:root {
+    --text-font: 'Raleway', sans-serif;
+    --text-color: #fffaf0;
+}
+
+h1 {
+    font-family: var(--text-font);
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+h3 {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15rem;
+    color: var(--text-color);
+}
+
+p {
+    font-family: var(--text-font);
+    font-size: 3rem;
+    color: var(--text-color);
+}
+
+ul, li, .facts-title {
+    font-family: var(--text-font);
+    font-size: 1.5rem;
+    color: var(--text-color);
+    text-align: left;
+}
+
+.columns {
+    align-content: center;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>World Clock</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@800&family=Raleway:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script src="script/bundle.js"></script>
+</head>
+<body>
+    <h1>The World Clock</h1>
+
+    <div class="container columns">
+        <div class="column">
+
+            <div class="form-container">
+                <form action="http://api.geonames.org/searchJSON?username=ricardofrancoli" method="GET">
+                    <input id="search-bar" type="text" placeholder="search for any town!" autocomplete="off"/>
+                    <!-- <button type="submit">Search!</button> -->
+                </form>
+            </div>
+
+            <div class="dropdown is-active">
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="autocomplete"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="user-message">
+        <p><span class="timezone-text">Hi! It looks like your location is</span> <b><span class="timezone-local"></span></b></p>
+        <p><span class="clock-text">The local time is:</span></p>
+        <h3 class="time"></h3>
+        <p class="search-facts is-hidden"></p>
+    </div>
+    <div class="content">
+        <div class="search-facts-list is-hidden"></div>
+    </div>
+
+    <!-- <div class="user-search is-hidden">
+        <p>Here's the time in <b><span class="town"></span></b>:</p>
+        <p><span class="time"></span></p>
+    </div> -->
+
+
+    <script src="script/gettime.js"></script>
+    <script src="script/getlocation.js"></script>
+</body>
+</html>
