@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
     <title>World Clock</title>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css"> -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@800&family=Raleway:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
     <script src="script/bundle.js"></script>
 </head>
 <body>
-    <h1 id="title" class="underline">The World Clock</h1>
+    <h1 id="title" class="underline"><a id="link" href="/">The World Clock</a></h1>
 
     <div class="container columns">
         <div class="column">
@@ -20,11 +20,7 @@
                 </form>
             </div>
 
-            <div class="dropdown is-hidden autocomplete">
-                <!-- <div class="" id="dropdown-menu" role="menu"> classes de aquí arriba estaban en dos divs en Bulma -->
-                    <!-- <div class=""></div> -->
-                <!-- </div> -->
-            </div>
+            <div class="dropdown is-hidden autocomplete"></div>
 
         </div>
     </div>
