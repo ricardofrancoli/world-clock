@@ -11,7 +11,7 @@ let townOptions;
 
 const townSearch = async (search) => {
     try {
-        const res = await axios.get('http://api.geonames.org/searchJSON?', {
+        const res = await axios.get('http://secure.geonames.org/searchJSON?', {
             params: {
                 q: search,
                 orderby: 'relevance',

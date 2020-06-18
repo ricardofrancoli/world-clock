@@ -21,7 +21,7 @@ const getClock = async (timezone) => {
 
 const getTimezone = async (lat, lng, population) => {
     try {
-        const res = await axios.get('http://api.geonames.org/timezoneJSON?', {
+        const res = await axios.get('http://secure.geonames.org/timezoneJSON?', {
             params: {
                 lat: lat,
                 lng: lng,
