@@ -13,14 +13,13 @@ const getClock = async (timezone) => {
         const unixtime = res.data.unixtime + res.data.raw_offset;
         startClock(unixtime);
         timezoneLocal.textContent = `${res.data.timezone} ${getLocationEmoji(res.data.timezone)}`;
-        // console.log(res)
     }
     catch (err) {
         console.log(`...ooops! There must've been an error. Try reloading the page :). Error: ${err}`);
     }
 }
 
-const getTimezone = async (lat, lng) => {
+const getTimezone = async (lat, lng, population) => {
     try {
         const res = await axios.get('http://api.geonames.org/timezoneJSON?', {
             params: {
@@ -31,11 +30,10 @@ const getTimezone = async (lat, lng) => {
         });
         console.log(res);
         getClock(res.data.timezoneId);
-        getFacts(res.data.lat, res.data.lng);
-        getFactsList(res.data.timezoneId, res.data.sunrise, res.data.sunset, res.data.lat, res.data.lng)
+        getFactsList(res.data.timezoneId, res.data.sunrise, res.data.sunset, res.data.lat, res.data.lng, population)
     }
     catch (err) {
-        console.log('Oops! There\'s been an error!');
+        console.log('Oops! There\'s been an error!' + err);
     }
 }
 
@@ -69,13 +67,20 @@ const getLocationEmoji = (timezone) => {
     }
 }
 
-const getFactsList = (timezoneId, sunrise, sunset, lat, lng) => {
+const getFactsList = (timezoneId, sunrise, sunset, lat, lng, population) => {
+    sunrise = parseDateToHHMM(sunrise);
+    sunset = parseDateToHHMM(sunset);
     searchFactsList.innerHTML = `
     <li>It's in the <b>${timezoneId} ${getLocationEmoji(timezoneId)}</b> timezone</li>
-    <li>Sunrise's at <b>${sunrise.slice(11)}h</b></li>
-    <li>And sunset's at <b>${sunset.slice(11)}h</b></li>
+    <li>Population: <b>${new Intl.NumberFormat().format(population)}</b></li>
+    <li>Sunrise's at <b>${sunrise}h</b></li>
+    <li>And sunset's at <b>${sunset}h</b></li>
     <li>Here are the coordinates – <i>Latitude:</i> <b>${lat}</b> | <i>Longitude:</i> <b>${lng}</b></li>
 `;
+}
+
+const parseDateToHHMM = (date) => {
+    return date = new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 getClock();
