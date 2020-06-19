@@ -6,15 +6,22 @@ const clockText = document.querySelector('.clock-text');
 const getClock = async (timezone) => {
     console.log(timezone);
     let res;
-    let unixtime;
     try {
         if(!timezone) {
             res = await axios.get('http://worldtimeapi.org/api/ip');
-            unixtime = res.data.unixtime;
         } else {
             res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
-            unixtime = res.data.unixtime + res.data.raw_offset;
         }
+
+        let unixtime = res.data.unixtime - res.data.raw_offset;
+
+        // if(!timezone) {
+        //     res = await axios.get('http://worldtimeapi.org/api/ip');
+        //     unixtime = res.data.unixtime;
+        // } else {
+        //     res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
+        //     unixtime = res.data.unixtime + res.data.raw_offset;
+        // }
 
         console.log(res)
 
@@ -53,6 +60,9 @@ const getTimezone = async (lat, lng, population) => {
 
 let interval;
 const startClock = (unixtime) => {
+    // console.log('1st unixtime: ' + unixtime);
+    // unixtime = Date.parse(unixtime);
+    // console.log('2nd unixtime: ' + unixtime);
     const timeCount = () => {
         let date = new Date(unixtime * 1000);
         let currentTime = date.toLocaleTimeString();
