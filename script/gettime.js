@@ -4,13 +4,27 @@ const timezoneText = document.querySelector('.timezone-text');
 const clockText = document.querySelector('.clock-text');
 
 const getClock = async (timezone) => {
+    console.log(timezone);
     let res;
+    let unixtime;
     try {
-        !timezone ? 
-            res = await axios.get('http://worldtimeapi.org/api/ip') :
+        if(!timezone) {
+            res = await axios.get('http://worldtimeapi.org/api/ip');
+            unixtime = res.data.unixtime;
+        } else {
             res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
+            unixtime = res.data.unixtime + res.data.raw_offset;
+        }
 
-        const unixtime = res.data.unixtime + res.data.raw_offset;
+        console.log(res)
+
+        // !timezone ? 
+        //     res = await axios.get('http://worldtimeapi.org/api/ip') :
+        //     res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
+
+        // console.log(res)
+
+        // const unixtime = res.data.unixtime + res.data.raw_offset;
         startClock(unixtime);
         timezoneLocal.textContent = `${res.data.timezone} ${getLocationEmoji(res.data.timezone)}`;
     }
