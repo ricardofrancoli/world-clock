@@ -4,39 +4,30 @@ const timezoneText = document.querySelector('.timezone-text');
 const clockText = document.querySelector('.clock-text');
 
 const getClock = async (timezone) => {
-    console.log(timezone);
-    let res;
     try {
+        let res;
         if(!timezone) {
             res = await axios.get('http://worldtimeapi.org/api/ip');
         } else {
             res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
         }
 
-        let unixtime = res.data.unixtime - res.data.raw_offset;
+        let rawOffset;
+        if(res.data.dst == true) {
+            rawOffset = res.data.raw_offset * 1000;
+        } else if (res.data.dst == false) {
+            rawOffset = (res.data.raw_offset - 3600) * 1000;
+        }
 
-        // if(!timezone) {
-        //     res = await axios.get('http://worldtimeapi.org/api/ip');
-        //     unixtime = res.data.unixtime;
-        // } else {
-        //     res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
-        //     unixtime = res.data.unixtime + res.data.raw_offset;
-        // }
+        let unixtime = res.data.unixtime * 1000;
 
         console.log(res)
 
-        // !timezone ? 
-        //     res = await axios.get('http://worldtimeapi.org/api/ip') :
-        //     res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
-
-        // console.log(res)
-
-        // const unixtime = res.data.unixtime + res.data.raw_offset;
-        startClock(unixtime);
+        startClock(unixtime, rawOffset);
         timezoneLocal.textContent = `${res.data.timezone} ${getLocationEmoji(res.data.timezone)}`;
     }
     catch (err) {
-        console.log(`...ooops! There must've been an error. Try reloading the page :). Error: ${err}`);
+        console.log(`...ooops! There must've been an error. Error: ${err}`);
     }
 }
 
@@ -59,15 +50,11 @@ const getTimezone = async (lat, lng, population) => {
 }
 
 let interval;
-const startClock = (unixtime) => {
-    // console.log('1st unixtime: ' + unixtime);
-    // unixtime = Date.parse(unixtime);
-    // console.log('2nd unixtime: ' + unixtime);
+const startClock = (unixtime, rawOffset) => {
     const timeCount = () => {
-        let date = new Date(unixtime * 1000);
-        let currentTime = date.toLocaleTimeString();
+        let currentTime = new Date(unixtime + rawOffset).toLocaleTimeString();
         time.textContent = currentTime;
-        unixtime += 1;
+        unixtime += 1000;
     }
     interval = setInterval(timeCount, 1000)
     timeCount();
@@ -92,6 +79,7 @@ const getLocationEmoji = (timezone) => {
 }
 
 const getFactsList = (timezoneId, sunrise, sunset, lat, lng, population) => {
+    console.log(sunset)
     sunrise = parseDateToHHMM(sunrise);
     sunset = parseDateToHHMM(sunset);
     searchFactsList.innerHTML = `
@@ -104,7 +92,7 @@ const getFactsList = (timezoneId, sunrise, sunset, lat, lng, population) => {
 }
 
 const parseDateToHHMM = (date) => {
-    return date = new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.slice(11,16);
 }
 
 getClock();
