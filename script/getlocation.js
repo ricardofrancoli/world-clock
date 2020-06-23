@@ -21,9 +21,6 @@ const townSearch = async (search) => {
             },
         });
     
-        console.log(search)
-        console.log(res)
-    
         let towns;
         if(!search.length) {
             dropdown.classList.add('is-hidden');

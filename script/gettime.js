@@ -45,27 +45,6 @@ const getTimezone = async (lat, lng, population) => {
 }
 
 // Function that shows the time getting Unix epoch time + the offset, adds a second every second
-// let localOffset;
-// let interval;
-// const startClock = (unixtime, searchOffset) => {
-//     console.log(unixtime)
-//     console.log(localOffset);
-//     const timeCount = () => {
-//         let currentTime;
-//         // if(!unixtime) {
-//         //     currentTime = Date.now();
-//         //     time.textContent = new Date(currentTime).toLocaleTimeString();
-//         // } else {
-//         //     console.log('Time dif: ' + (searchOffset - localOffset));
-//             currentTime = new Date((unixtime + (searchOffset - localOffset)) * 1000).toLocaleTimeString();
-//             time.textContent = currentTime;
-//             unixtime += 1;
-//         // }
-//     }
-//     interval = setInterval(timeCount, 1000)
-//     timeCount();
-// }
-
 let localOffset;
 let interval;
 const startClock = (unixtime, searchOffset) => {
