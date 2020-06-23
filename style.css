@@ -31,6 +31,7 @@ h1, #title {
     font-weight: 700;
     line-height: 0.6;
     margin: 4vw;
+    padding-top: 3vh;
 }
 
 .underline {
@@ -127,7 +128,7 @@ ul, li, .facts-title {
 
 @media only screen and (max-width: 1060px) {
     h1, #title {
-        font-size: 4rem;
+        font-size: 4.5rem;
         line-height: 0.6;
     }
     .underline {

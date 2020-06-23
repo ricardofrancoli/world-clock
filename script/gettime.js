@@ -3,27 +3,21 @@ const timezoneLocal = document.querySelector('.timezone-local');
 const timezoneText = document.querySelector('.timezone-text');
 const clockText = document.querySelector('.clock-text');
 
+// Gets the current time (ip) or user's input time. Raw offset compared to UTC needs to be considered depending if the place is in DST or not
 const getClock = async (timezone) => {
     try {
         let res;
         if(!timezone) {
             res = await axios.get('http://worldtimeapi.org/api/ip');
+            localOffset = res.data.raw_offset + res.data.dst_offset;
         } else {
             res = await axios.get('http://worldtimeapi.org/api/timezone/' + timezone);
         }
 
-        let rawOffset;
-        if(res.data.dst == true) {
-            rawOffset = res.data.raw_offset * 1000;
-        } else if (res.data.dst == false) {
-            rawOffset = (res.data.raw_offset - 3600) * 1000;
-        }
+        let unixtime = res.data.unixtime;
+        let searchOffset = res.data.raw_offset + res.data.dst_offset;
 
-        let unixtime = res.data.unixtime * 1000;
-
-        console.log(res)
-
-        startClock(unixtime, rawOffset);
+        startClock(unixtime, searchOffset);
         timezoneLocal.textContent = `${res.data.timezone} ${getLocationEmoji(res.data.timezone)}`;
     }
     catch (err) {
@@ -31,6 +25,7 @@ const getClock = async (timezone) => {
     }
 }
 
+// Gets timezone name and the population of a given town to add to the facts below
 const getTimezone = async (lat, lng, population) => {
     try {
         const res = await axios.get('http://secure.geonames.org/timezoneJSON?', {
@@ -49,12 +44,38 @@ const getTimezone = async (lat, lng, population) => {
     }
 }
 
+// Function that shows the time getting Unix epoch time + the offset, adds a second every second
+// let localOffset;
+// let interval;
+// const startClock = (unixtime, searchOffset) => {
+//     console.log(unixtime)
+//     console.log(localOffset);
+//     const timeCount = () => {
+//         let currentTime;
+//         // if(!unixtime) {
+//         //     currentTime = Date.now();
+//         //     time.textContent = new Date(currentTime).toLocaleTimeString();
+//         // } else {
+//         //     console.log('Time dif: ' + (searchOffset - localOffset));
+//             currentTime = new Date((unixtime + (searchOffset - localOffset)) * 1000).toLocaleTimeString();
+//             time.textContent = currentTime;
+//             unixtime += 1;
+//         // }
+//     }
+//     interval = setInterval(timeCount, 1000)
+//     timeCount();
+// }
+
+let localOffset;
 let interval;
-const startClock = (unixtime, rawOffset) => {
+const startClock = (unixtime, searchOffset) => {
+    console.log(unixtime)
+    console.log(localOffset);
     const timeCount = () => {
-        let currentTime = new Date(unixtime + rawOffset).toLocaleTimeString();
-        time.textContent = currentTime;
-        unixtime += 1000;
+        let currentTime;
+            currentTime = new Date((unixtime + (searchOffset - localOffset)) * 1000).toLocaleTimeString();
+            time.textContent = currentTime;
+            unixtime += 1;
     }
     interval = setInterval(timeCount, 1000)
     timeCount();
@@ -79,16 +100,15 @@ const getLocationEmoji = (timezone) => {
 }
 
 const getFactsList = (timezoneId, sunrise, sunset, lat, lng, population) => {
-    console.log(sunset)
     sunrise = parseDateToHHMM(sunrise);
     sunset = parseDateToHHMM(sunset);
     searchFactsList.innerHTML = `
-    <li>It's in the <b>${timezoneId} ${getLocationEmoji(timezoneId)}</b> timezone</li>
-    <li>Population: <b>${new Intl.NumberFormat().format(population)}</b></li>
-    <li>Sunrise's at <b>${sunrise}h</b></li>
-    <li>And sunset's at <b>${sunset}h</b></li>
-    <li>Here are the coordinates – <i>Latitude:</i> <b>${lat}</b> | <i>Longitude:</i> <b>${lng}</b></li>
-`;
+        <li>It's in the <b>${timezoneId} ${getLocationEmoji(timezoneId)}</b> timezone</li>
+        <li>Population: <b>${new Intl.NumberFormat().format(population)}</b></li>
+        <li>Sunrise's at <b>${sunrise}h</b></li>
+        <li>And sunset's at <b>${sunset}h</b></li>
+        <li>Here are the coordinates – <i>Latitude:</i> <b>${lat}</b> | <i>Longitude:</i> <b>${lng}</b></li>
+    `;
 }
 
 const parseDateToHHMM = (date) => {
